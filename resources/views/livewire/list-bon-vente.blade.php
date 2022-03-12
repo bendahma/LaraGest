@@ -72,7 +72,7 @@
                                             </a>
                                             @if ($b->montantReste >  0)
                                                 <button class="btn btn-outline-success border-1" data-toggle="modal" data-target="#exampleModal">
-                                                    <span style="font-weight:700;color:white"><i class="fas fa-money-bill-wave"></i> Versement</span>
+                                                    <span style="font-weight:700;color:black"><i class="fas fa-money-bill-wave"></i> Versement</span>
                                                 </button>
                                                 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
