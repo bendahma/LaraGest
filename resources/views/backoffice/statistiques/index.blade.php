@@ -7,8 +7,6 @@
                      <h1 class="h3 mb-0 text-gray-800">Les revenus</h1>
                      <small>Prendre en compte les charges du magazin</small>
                  </div>
-
-                {{-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> --}}
               </div>
 
               <div class="row">
@@ -98,41 +96,39 @@
                   </div>
                 </div>
               </div>
-
-
-              <div class="d-sm-flex align-items-left justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Charts des revenus</h1>
-              </div>
-
               <div class="row">
-
-                <div class="col-xl-6 col-lg-6">
-                  <div class="card shadow mb-4">
-                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                      <h6 class="m-0 font-weight-bold text-primary d-flex">Le revenu du mois {{date('M Y')}}
-                      </h6>
-                    </div>
-                    <div class="card-body">
-                      <div class="chart-area" id="chart"></div>
-                      <div class="chart-area d-none" id="customChart"></div>
+                  <div class="col-xl-6 col-lg-6">
+                           @livewire('top-products')
+                  </div>
+                  <div class="col-xl-6 col-lg-6">
+                     <div class="card text-white bg-info shadow">
+                        <div class="card-header text-white bg-info py-3 d-flex flex-row align-items-center justify-content-between">
+                           <h6 class="m-0 font-weight-bold text-white">Revenue par jour</h6>
+                        </div>
+                        <div class="card-body">
+                            <table class="table text-white bg-info font-weight-bold" id="Table">
+                                <thead>
+                                    <tr>
+                                        <th>N°</th>
+                                        <th>Date</th>
+                                        <th>Montant</th>
+                                        <th>Dette</th>
+                                       
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($dailyVente as $d)
+                                        <tr>
+                                            <td> {{$loop->iteration}} </td>
+                                            <td> {{$d->date}} </td>
+                                            <td> {{ number_format($d->montant,2,'.',' ')}} </td>
+                                            <td> {{ number_format($d->montantReste,2,'.',' ')}} </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                   </div>
-                </div>
-
-                <div class="col-xl-6 col-lg-6">
-                  <div class="card shadow mb-4">
-                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                      <h6 class="m-0 font-weight-bold text-primary d-flex">Les dettes du mois {{date('M Y')}}
-                      </h6>
-                    </div>
-                    <div class="card-body">
-                      <div class="chart-area" id="detteChart"></div>
-                    </div>
-                  </div>
-                </div>
               </div>
-
-
-
-              @livewire('top-products')
 @endsection

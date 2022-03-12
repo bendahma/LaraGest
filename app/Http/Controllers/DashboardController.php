@@ -47,8 +47,14 @@ class DashboardController extends Controller
             'netAnneeEarning' => $netAnneeEarning,
         ];
 
+        $dailyVente = BonVente::select(DB::raw('DATE(created_at) as date'), DB::raw('sum(montantTotal) as montant'), DB::raw('sum(montantReste) as montantReste'))
+                              ->groupBy('date')
+                              ->get();
 
-         return view('backoffice.statistiques.index')->with('earning',$earning)->with('netEarning',$netEarning);
+         return view('backoffice.statistiques.index')
+                  ->with('earning',$earning)
+                  ->with('netEarning',$netEarning)
+                  ->with('dailyVente',$dailyVente);
 
     }
 }

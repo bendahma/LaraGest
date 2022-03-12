@@ -18,21 +18,19 @@ class SalesChart extends BaseChart
    public $dateDebut;
    public $dateFin;
 
-   public function handler(Request $request): Chartisan
-   {
+    public function handler(Request $request): Chartisan
+    {
 
-   $dateDebut = $request->dateDebut . ' 00:00:00';
-   $dateFin = $request->dateFin . ' 23:59:59';
+      $dateDebut = $request->dateDebut . ' 00:00:00';
+      $dateFin = $request->dateFin . ' 23:59:59';
 
-      $vente = BonVente::select(DB::raw('DATE(created_at) as date'), DB::raw('sum(montantTotal) as montant'))
-                           ->whereBetween('created_at',[$dateDebut,$dateFin])
-                           ->groupBy('date')
-                           ->pluck('montant','date');
+        $vente = BonVente::select(DB::raw('DATE(created_at) as date'), DB::raw('sum(montantTotal) as montant'))
+                              ->whereBetween('created_at',[$dateDebut,$dateFin])
+                              ->groupBy('date')
+                              ->pluck('montant','date');
 
-
-
-      return Chartisan::build()
-                  ->labels($vente->keys()->toArray())
-                  ->dataset('Revenu', $vente->values()->toArray());
-   }
+        return Chartisan::build()
+                     ->labels($vente->keys()->toArray())
+                     ->dataset('Revenu', $vente->values()->toArray());
+    }
 }
