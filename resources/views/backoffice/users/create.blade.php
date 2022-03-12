@@ -38,7 +38,6 @@
                         <div class="form-group">
                                 <label for="">Role</label>
                                 <select name="role" id="" class="custom-select">
-                                    <option value="vendeur" {{isset($user) && $user->role == 'vendeur' ? 'selected' : ''}} >Vendeur</option>
                                     <option value="admin" {{isset($user) && $user->role == 'admin' ? 'selected' : ''}} >Administrateur</option>
                                 </select>
                         </div>

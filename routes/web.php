@@ -16,11 +16,6 @@ use App\Http\Controllers\EmployeController;
 use App\Http\Controllers\VenteController;
 use App\Http\Controllers\MagazinController;
 
-
-Route::get('t', function () {
-    dd(auth()->user()->isAdmin());
-});
-
 Route::middleware(['auth'])->group(function(){
 
    Route::redirect('/','/login');
