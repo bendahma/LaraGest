@@ -43,8 +43,13 @@
           <i class="fas fa-shopping-cart fa-2x"></i>
           <span>Vente</span></a>
        </li>
+      <li class="nav-item @if( Route::is('facilite.*') ) active @endif ">
+         <a class="nav-link" href=" {{route('facilite.index')}} "  >
+            <i class="fas fa-coins fa-2x"></i>
+          <span>Facilité</span></a>
+       </li>
        <hr class="sidebar-divider">
-       <li class="nav-item @if( Route::is('product.*') ) active @endif">
+       <li class="nav-item @if( Route::is('product.*') ) active @endif" style="z-index: 99">
          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#productCollapse" aria-expanded="true" aria-controls="productCollapse">
            <i class="fas fa-laptop"></i>
            <span>Produits</span>

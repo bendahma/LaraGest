@@ -15,7 +15,11 @@
                         <tr>
                             <th>N°</th>
                             <th>Nom</th>
-                            <th>Action</th>
+                            <th>Total Achat</th>
+                            <th>Total Gros</th>
+                            <th>Total Détails</th>
+                            <th>Total Facilite</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -23,6 +27,10 @@
                             <tr>
                                 <td> {{$loop->iteration}} </td>
                                 <td> <a href=" {{route('marque.products',$marque->id)}} "> {{$marque->name}} </a>  </td>
+                                <td> {{ number_format($marque->get_mony_achat_total()['total_achat'],2,'.',' ')}} </td>
+                                <td> {{ number_format($marque->get_mony_achat_total()['total_gros'],2,'.',' ')}} </td>
+                                <td> {{ number_format($marque->get_mony_achat_total()['total_details'],2,'.',' ')}} </td>
+                                <td> {{ number_format($marque->get_mony_achat_total()['total_facilite'],2,'.',' ')}} </td>
                                 <td>
                                     <select name="" id="" class="custom-select" onchange="window.location.href=this.value;">
                                             <option selected disabled>Action</option>

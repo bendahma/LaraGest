@@ -96,6 +96,13 @@ Route::middleware(['auth'])->group(function(){
         Route::name('vente.')->group(function(){
             Route::get('/',[VenteController::class,'VenteGros'])->name('gros');
             Route::get('/selectProduct/client/{client}',[VenteController::class,'selectProduct'])->name('selectProduct');
+           
+        });
+        Route::name('facilite.')->group(function(){
+            Route::get('/facilite',[VenteController::class,'facilite'])->name('index');
+            Route::get('/facilite/{bonVente}/versement',[VenteController::class,'versement'])->name('versement');
+            Route::post('/facilite/{bonVente}/versement',[VenteController::class,'versementMontant'])->name('versement');
+            Route::get('/facilite/{bonVente}/telecharge',[VenteController::class,'telechargerBonVente'])->name('telecharger');
         });
     });
 

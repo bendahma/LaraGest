@@ -83,7 +83,7 @@
         <div class="card card-success">
             <div class="card-header">
                 <div class="d-sm-flex align-items-center justify-content-between">
-                    <h4 class="pt-1" style="font-weight: 700">Facture N° {{ $bonVente->id }}</h4>
+                    <h4 class="pt-1" style="font-weight: 700">Facture N° {{ $bonVente->id }} (Vente en {{$bonVente->typeVente}})</h4>
                     <div class="">
                       <a href=" {{route('bonVente.telecharge',$bonVente->id)}} " class="d-none d-sm-inline-block btn btn-outline-success shadow-sm"><i class="fas fa-cloud-download-alt mr-2"></i>Téléchargé la facture</a>
                       @if ($bonVente->montantReste < 0)
@@ -207,12 +207,3 @@
 
     </div>
 @endsection
-{{--
-<td>
-    <select name="" id="" class="custom-select" onchange="window.location.href=this.value;">
-            <option selected disabled>Action</option>
-            <option value=" {{url('/backoffice/client/'.$client->id)}} ">Profile</option>
-            <option value=" {{url('/backoffice/client/'.$client->id.'/edit')}} ">Mettre à jours</option>
-            <option value="{{url('/backoffice/client/'.$client->id.'/supprime')}}">Supprime</option>
-    </select>
-</td> --}}

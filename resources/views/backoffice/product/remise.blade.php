@@ -15,7 +15,7 @@
                             <th>N°</th>
                             <th>Nom</th>
                             <th>Prix d'achat</th>
-                            <th>Prix de vente</th>
+                            <th>Prix Détails</th>
                             <th>Remise</th>
                             <th>Date Debut</th>
                             <th>Date Fin</th>
@@ -31,7 +31,7 @@
                                 @if ($product->price->discount == true)
                                     <td>
                                        <span class="badge rounded-pill bg-danger text-light">En remise</span><br/>
-                                       {{ number_format(  $product->price->prixVenteGros - ( ($product->price->prixVenteGros *  $product->price->remise) / 100 ) ,2,'.',' ')}}
+                                       {{ number_format(  $product->price->prixDetails - ( ($product->price->prixDetails *  $product->price->remise) / 100 ) ,2,'.',' ')}}
                                     </td>
                                     <td>{{$product->price->remise . ' %'}}</td>
                                     <td>{{$product->price->dateDebutReduction}}</td>
@@ -39,7 +39,7 @@
                                     <td> <a href="{{route('product.endDiscount',$product->id)}}" class="btn btn-outline-danger">Arrète </a> </td>
 
                                 @else
-                                <td>{{ number_format($product->price->prixVenteGros,2,'.',' ')}} </td>
+                                <td>{{ number_format($product->price->prixDetails,2,'.',' ')}} </td>
 
                                      <form action=" {{route('product.remisePrix',$product->id)}} " method="POST">
                                         @csrf

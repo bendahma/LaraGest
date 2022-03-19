@@ -73,4 +73,19 @@ class Product extends Model
         return $product->price->discount == true && ($product->price->dateDebutReduction <= date('Y-m-d') && $product->price->dateFinReduction >= date('Y-m-d')) ? true : false ;
     }
 
+    public function nomber_vente(){
+      $bonVentes = BonVente::whereHas('products',function($q){
+            $q->where('id',$this->id);
+       })->with('products')->get();
+       $nbr = 0 ;
+       foreach ($bonVentes as  $bonVente) {
+          foreach ($bonVente->products as $product) {
+             $nbr += $product->pivot->quantite ;
+          }
+       };
+
+       return $nbr ;
+
+    }
+
 }

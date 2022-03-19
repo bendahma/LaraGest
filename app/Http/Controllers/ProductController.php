@@ -63,6 +63,8 @@ class ProductController extends Controller
         Price::create([
             'prixAchat' => $request->prixAchat,
             'prixVenteGros' => $request->prixVenteGros,
+            'prixDetails' => $request->prixDetails,
+            'prixFacilite' => $request->prixFacilite,
             'product_id' => $product->id,
         ]);
 
@@ -116,8 +118,8 @@ class ProductController extends Controller
         $price = Price::where('product_id',$product->id)->first();
 
         $product->update([
+            'refProduit' => $request->refProduit,
             'name' => $request->name,
-            'description' => $request->description ,
             'category_id' => $request->category_id,
             'marque_id' => $request->marque_id,
 
@@ -126,6 +128,8 @@ class ProductController extends Controller
         $price->update([
             'prixAchat' => $request->prixAchat,
             'prixVenteGros' => $request->prixVenteGros,
+            'prixDetails' => $request->prixDetails,
+            'prixFacilite' => $request->prixFacilite,
             'product_id' => $product->id,
         ]);
 
@@ -171,7 +175,7 @@ class ProductController extends Controller
         })->get();
         
         foreach ($product_discount as $product) {
-           if($product->dateFinReduction < date('Y-m-d')){
+           if($product->dateFinReduction > date('Y-m-d')){
               $product->price->update([
                   'discount' => false,
                   'remise' => 0,
@@ -191,7 +195,7 @@ class ProductController extends Controller
         $prixReduction = $price->prixVenteGros - ( $price->prixVenteGros * $request->remise ) / 100;
 
         if($prixReduction <= $price->prixAchat) {
-            Alert::warning('Attention','La nouvelle prix du vente est inferieur ou egal à le prix d\'achat');
+            Alert::warning('Attention','La nouvelle prix détails est inferieur ou egal à le prix d\'achat');
             return back();
         }
 

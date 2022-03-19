@@ -15,7 +15,7 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <input type="text" class="form-control" id="" placeholder="nom du categorie" name="name" value="{{isset($category) ? $category->name : ''}}">
+                            <input type="text" required class="form-control" id="" placeholder="nom du categorie" name="name" value="{{isset($category) ? $category->name : ''}}">
                             @error('name')
                                 <div class="" style="color:red;font-size:0.8rem;font-weight:700">{{ $message }}</div>
                             @enderror

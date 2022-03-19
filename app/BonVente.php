@@ -24,10 +24,19 @@ class BonVente extends Model
         return $this->belongsToMany(Product::class,'bon_vente_product')->withPivot(['quantite','montantTotal','prixVente','montantGained'])->withTimestamps();;
     }
 
-    public function get_created_at($d)
-    {
-        return DateTime::createFromFormat('Y-m-d H:i:s', $d)->format('d-m-Y H:i:s');;
+    public function versements(){
+       return $this->hasMany(Versement::class);
     }
+
+   public function get_created_at($d)
+   {
+      return DateTime::createFromFormat('Y-m-d H:i:s', $d)->format('d-m-Y H:i:s');;
+   }
+
+   public function get_created_at_regular($d)
+   {
+      return DateTime::createFromFormat('Y-m-d H:i:s', $d)->format('d-m-Y');
+   }
 
       public static function search($search,$client,$date,$paiement){
             if($paiement == 'complet') {
@@ -68,6 +77,7 @@ class BonVente extends Model
 
          if($montantTotal != null){
             $mTotal = !is_null($op) && $op == 'remove' ? $bon->montantTotal - $montantTotal : $bon->montantTotal + $montantTotal;
+            $mTotal = $mTotal > 0 ? $mTotal : 0 ;
             $bon->update([
                'montantTotal' => $mTotal ,
 

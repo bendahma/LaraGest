@@ -27,11 +27,14 @@
                     <tr>
                         <th>N°</th>
                         <th>Nom</th>
-                        <th>Marque</th>
-                        <th>Category</th>
-                        <th>Prix d'achat</th>
-                        <th>Prix du vente</th>
-                        <th>Action</th>
+                        {{-- <th>Marque</th>
+                        <th>Category</th> --}}
+                        <th>Prix <br> d'achat</th>
+                        <th>Prix <br> du Gros</th>
+                        <th>Prix <br> du Détails</th>
+                        <th>Prix <br> du Facilité</th>
+                        <th>Quantité <br> vendu</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -39,20 +42,24 @@
                         <tr>
                             <td> {{$loop->iteration}} </td>
                             <td style="width:20%"> {{$product->name}} </td>
-                            <td style="width:15%">{{$product->marque->name}}</td>
-                            <td style="width:15%">{{$product->category->name}}</td>
-                            <td style="width:15%"> {{ number_format($product->price->prixAchat,2,'.',' ')}} DA</td>
+                            {{-- <td style="width:15%">{{$product->marque->name}}</td>
+                            <td style="width:15%">{{$product->category->name}}</td> --}}
+                            <td style="width:15%"> {{ number_format($product->price->prixAchat,2,'.',' ')}}</td>
+                            <td style="width:15%"> {{ number_format($product->price->prixVenteGros,2,'.',' ')}}</td>
                             <td style="width:15%">
                                 @if ($product->price->discount == true)
-                                    <span style="font-size: 0.8rem;   text-decoration: line-through"> {{  number_format(  $product->price->prixVenteGros,2,'.',' ' ) }} </span>
+                                    <span style="font-size: 0.8rem;   text-decoration: line-through"> {{  number_format(  $product->price->prixDetails,2,'.',' ' ) }} </span>
                                     <span class="badge rounded-pill bg-danger text-light ml-1">En remise - {{ $product->price->remise }} % </span> <br>
-                                    {{ number_format(  $product->price->prixVenteGros -  ( ($product->price->prixVenteGros *  $product->price->remise) / 100 ) ,2,'.',' ')}}
+                                    {{ number_format(  $product->price->prixDetails -  ( ($product->price->prixDetails *  $product->price->remise) / 100 ) ,2,'.',' ')}}
                                 @else
-                                    {{ number_format($product->price->prixVenteGros,2,'.',' ')}}
+                                    {{ number_format($product->price->prixDetails,2,'.',' ')}}
 
                                 @endif
 
                             </td>
+                            <td style="width:15%"> {{ number_format($product->price->prixFacilite,2,'.',' ')}}</td>
+                            <td style="width:15%"> {{ $product->nomber_vente() }}</td>
+
                             <td>
                                 <select name="" id="" class="custom-select" onchange="window.location.href=this.value;">
                                     <option selected disabled>Action</option>

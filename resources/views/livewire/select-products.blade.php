@@ -114,6 +114,24 @@
     </div>
 
     <div class="row">
+       <div class="col-lg-7">
+         <div class="card shadow-lg rounded">
+            <div class="card-header bg-info text-light">
+                <div class="d-sm-flex align-items-center justify-content-between">
+                        <h5 class="">Vente en :</h5>
+                </div>
+            </div>
+            <div class="card-body">
+               <select name="" id="" wire:model="TypeVente" class="">
+                  <option value="prixDetails">Vente en Détials</option>
+                  <option value="prixVenteGros">Vente en Gros</option>
+                  <option value="prixFacilite">Vente en Fatilité</option>
+               </select>
+            </div>
+       </div>
+    </div></div>
+
+    <div class="row mt-2">
         <div class="col-lg-7">
             <div class="card card-success">
                 <div class="card-header bg-dark text-light">
@@ -148,7 +166,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($products as $product)
+                            @forelse($products as $key => $product)
                                 <tr>
                                     <td style="width:5%"> {{$loop->iteration}} </td>
                                     <td style="width:40%"> {{$product->name}} </td>
@@ -156,9 +174,40 @@
                                         @if ($product->check_discount($product->id))
                                             <span style="font-size: 0.8rem;   text-decoration: line-through"> {{  number_format(  $product->price->prixVenteGros,2,'.',' ' ) }} </span>
                                             <span class="badge rounded-pill bg-danger text-light ml-1">En remise</span> <br>
-                                            {{ number_format(  $product->price->prixVenteGros -  ( ($product->price->prixVenteGros *  $product->price->remise) / 100 ) ,2,'.',' ')}} DA
+                                            {{  number_format(  $product->price->prixVenteGros -  ( ($product->price->prixVenteGros *  $product->price->remise) / 100 ) ,2,'.',' ')}} DA
                                         @else
-                                            {{ number_format($product->price->prixVenteGros,2,'.',' ')}} DA
+                                       <div class="d-flex align-items-center ">
+                                          {{ $product->price->prixVenteFinale != 0 ? number_format( $product->price->prixVenteFinale ,2,'.',' ') : number_format( $product->price[$TypeVente],2,'.',' ') }}
+                                          <button class="btn btn-link" data-toggle="modal" data-target="#changePrixProduit{{$product->id}}"><i class="fas fa-pen fa-xs"></i></button>
+                                          <div wire:ignore.self class="modal fade" id="changePrixProduit{{$product->id}}" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+                                           <div class="modal-dialog" role="document">
+                                               <div class="modal-content">
+                                                <form wire:submit.prevent="changePrixVente({{$product->id}})"> 
+                                                   <div class="modal-header">
+                                                       <h5 class="modal-title" id="">Prix </h5>
+                                                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                           <span aria-hidden="true close-btn">×</span>
+                                                       </button>
+                                                   </div>
+                                                   <div class="modal-body">
+                                                         <div class="row my-auto">
+                                                               <div class="col-lg-3 mt-2">
+                                                                  <label for="" class="my-auto">Prix</label>
+                                                               </div>
+                                                               <div class="col">
+                                                                  <input type="integer" class="form-control" id="" wire:model.defer="prixVenteProduit">
+                                                               </div>
+                                                         </div>
+                                                   </div>
+                                                   <div class="modal-footer">
+                                                       <button type="submit" class="btn btn-outline-success close-modal">Confirmé</button>
+                                                   </div>
+                                                </form>
+                                               </div>
+                                           </div>
+                                          </div>
+                                           
+                                       </div>
                                         @endif
                                     </td>
                                     <td style="width:15%">

@@ -16,6 +16,8 @@
                    <div class="row mt-5">
                         <div class="col-lg-2">
                             <div class="form-group">
+                              <small class="text-muted">Réference du produit</small>
+
                                 <input type="text" class="form-control" id="name" required placeholder="Référence du produit" name="refProduit" value="{{ isset($product) ? $product->refProduit : ''}}">
                                 @error('refProduit')
                                     <div class="" style="color:red;font-size:0.8rem;font-weight:700">
@@ -28,6 +30,7 @@
                         </div>
                         <div class="col">
                                 <div class="form-group">
+                                 <small class="text-muted">Nom du produit</small>
                                     <input type="text" class="form-control" required id="name" placeholder="Nom du produit" name="name" value="{{ isset($product) ? $product->name : ''}}">
                                     @error('name')
                                         <div class="" style="color:red;font-size:0.8rem;font-weight:700">Produit Déja exists</div>
@@ -36,6 +39,7 @@
                         </div>
                        <div class="col">
                             <div class="form-group">
+                                <small class="text-muted">Marque</small>
                                 <select name="marque_id" required id="" class="custom-select">
                                     <option>Selectionné une marque</option>
                                     @foreach ($marques as $marque)
@@ -48,6 +52,7 @@
                        </div>
                        <div class="col">
                             <div class="form-group">
+                                <small class="text-muted">Chatégory</small>
                                 <select name="category_id" id="" class="custom-select" required>
                                     <option >selectionné une catégorie</option>
                                     @foreach ($categories as $category)
@@ -64,7 +69,8 @@
                     <div class="row mt-5">
                         <div class="col">
                             <div class="form-group">
-                                <input type="text" required class="form-control" id="" placeholder="Prix d'achat du produit" name="prixAchat" value="{{isset($product) ? $product->price->prixAchat : ''}}">
+                              <small class="text-muted">Prix d'Achat</small>
+                              <input type="text" required class="form-control" id="" placeholder="Prix d'achat " name="prixAchat" value="{{isset($product) ? $product->price->prixAchat : ''}}">
                                 @error('price')
                                     <div class="" style="color:red;font-size:0.8rem;font-weight:700">{{ $message }}</div>
                                 @enderror
@@ -72,15 +78,35 @@
                             </div>
                             <div class="col">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" required id="" placeholder="Prix du vente du produit" name="prixVenteGros" value="{{isset($product) ? $product->price->prixVenteGros : ''}}">
+                                 <small class="text-muted">Prix du gros</small>
+                                    <input type="text" class="form-control" required id="" placeholder="Prix du gros" name="prixVenteGros" value="{{isset($product) ? $product->price->prixVenteGros : ''}}">
                                     @error('price')
+                                        <div class="" style="color:red;font-size:0.8rem;font-weight:700">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <small class="text-muted">Prix du détails</small>
+                                    <input type="text" class="form-control" required id="" placeholder="Prix du détails" name="prixDetails" value="{{isset($product) ? $product->price->prixDetails : ''}}">
+                                    @error('prixDetails')
+                                        <div class="" style="color:red;font-size:0.8rem;font-weight:700">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <small class="text-muted">Prix du facilité</small>
+                                    <input type="text" class="form-control" required id="" placeholder="Prix du facilité" name="prixFacilite" value="{{isset($product) ? $product->price->prixFacilite : ''}}">
+                                    @error('prixFacilite')
                                         <div class="" style="color:red;font-size:0.8rem;font-weight:700">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
                         <div class="col">
                             <div class="form-group">
-                                <input type="text" class="form-control" name="quantiteStock" required placeholder="Quantitté dans stock">
+                              <small class="text-muted">Quantité dans le stock</small>
+                                <input type="text" class="form-control" name="quantiteStock" required placeholder="Quantitté dans stock" value="{{isset($product) ? $product->stock->quantiteReste : ''}}">
                                 @error('quantiteStock')
                                     <div class="" style="color:red;font-size:0.8rem;font-weight:700">{{ $message }}</div>
                                 @enderror

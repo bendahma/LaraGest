@@ -9,11 +9,14 @@ use Livewire\Component;
 use App\Product;
 use App\Client;
 use App\Magazin;
+use App\Versement;
 
 class SelectProducts extends Component {
 
     use WithPagination;
     protected $listeners = ['refresh'=>'render'];
+
+    public $TypeVente = "prixDetails";
 
     public $search = "";
     public $items = 5 ;
@@ -25,7 +28,9 @@ class SelectProducts extends Component {
     public $selectedProducts;
     public $productToBeSelected ;
 
-    public $qtt;
+    public $prixVenteProduit = 0 ;
+
+    public $qtt = 1;
     public $oldQtt ;
     public $qttChange;
     public $editQuantite = 0 ;
@@ -47,21 +52,56 @@ class SelectProducts extends Component {
 
     }
 
+    public function changePrixVente($id){
+       $product = Product::find($id);
+      //  dd($product->price);
+       $product->price->update([
+          'prixVenteFinale' => $this->prixVenteProduit ,
+       ]);
+
+       $this->emit('refresh');
+       $this->emit('closeModel');
+    }
+
     public function addProductToCard(Product $product){
             if($product->checkStock($product->id,$this->qtt) == false){
                $this->qtt = 0 ;
                $this->emit('productoutOfSTock');
             } else {
-               // $this->montantTotal = $product->price->discount == true ? ($product->price->prixVenteGros - (($product->price->prixVenteGros*$product->price->remise)/100))*$this->qtt : $product->price->prixVenteGros * $this->qtt;
-               $this->montantTotal = $product::check_discount($product->id) ? ($product->price->prixVenteGros - (($product->price->prixVenteGros*$product->price->remise)/100))*$this->qtt : $product->price->prixVenteGros * $this->qtt;
-               $this->montantTotalBonVenteSansRemise =  $product->price->prixVenteGros * $this->qtt ;
+               if($product->price->prixVenteFinale == 0){
+
+                  $this->montantTotal = $product::check_discount($product->id) ? ($product->price->prixDetails - (($product->price->prixDetails*$product->price->remise)/100))*$this->qtt : $product->price[$this->TypeVente] * $this->qtt;
+               
+                  $this->montantTotalBonVenteSansRemise =  $product->price[$this->TypeVente] * $this->qtt ;
+                  
+               }else {
+
+                  $this->montantTotal = $product::check_discount($product->id) ? 
+                                                                              ($product->price->prixDetails - (($product->price->prixDetails*$product->price->remise)/100)) * $this->qtt 
+                                                                              : $product->price->prixVenteFinale * $this->qtt;
+               
+                  $this->montantTotalBonVenteSansRemise =  $product->price->prixVenteFinale * $this->qtt ;
+                  
+               }
+               
                $this->montantGained = $this->montantTotal - ( $product->price->prixAchat * $this->qtt ) ;
-               $prixVente = $product->price->discount == true ? $product->price->prixVenteGros - (($product->price->prixVenteGros*$product->price->remise)/100) : $product->price->prixVenteGros ;
+               
+               $prixVente = $product->price->discount == true ? $product->price->prixDetails - (($product->price->prixDetails*$product->price->remise)/100) : $product->price[$this->TypeVente] ;
+               
                $this->bonVente->products()->attach($product,['quantite'=>$this->qtt,'montantTotal'=>$this->montantTotal,'montantGained'=>$this->montantGained,'prixVente'=>$prixVente,]);
+               
                $this->bonVente->updateMontantBonVente($this->montantTotal);
+               
                $quantiteReste = $product->stock->quantiteReste - $this->qtt ;
+               
                $product->stock->update(['quantiteReste' => $quantiteReste]);
-               $this->qtt = 0 ;
+               
+               $this->qtt = 1 ;
+
+               if($this->TypeVente == 'prixFacilite') {
+                  $this->montantVerse = ( $this->montantTotal * 30 ) / 100 ;
+               }
+               
                $this->emit('refresh');
             }
 
@@ -70,9 +110,9 @@ class SelectProducts extends Component {
 
     public function removeProduct(Product $product,$quantite){
 
-            $this->montantTotal = $product->price->discount == true ? ($product->price->prixVenteGros - (($product->price->prixVenteGros*$product->price->remise)/100))*$quantite
-                                                      : $product->price->prixVenteGros * $quantite;
-            $this->montantTotalBonVenteSansRemise -=  $product->price->prixVenteGros * $quantite ;
+            $this->montantTotal = $product->price->discount == true ? ($product->price->prixDetails - (($product->price->prixDetails*$product->price->remise)/100))*$quantite
+                                                      : $product->price[$this->TypeVente] * $quantite;
+            $this->montantTotalBonVenteSansRemise -=  $product->price[$this->TypeVente] * $quantite ;
             $this->bonVente->updateMontantBonVente($this->montantTotal,null,'remove');
             $this->bonVente->products()->detach($product);
 
@@ -104,11 +144,21 @@ class SelectProducts extends Component {
                         ->where('product_id',$product->id)
                         ->first();
             $this->bonVente->updateMontantBonVente($oldMontant->montantTotal,null,'remove');
-            $this->montantTotal = $product->price->discount == true ? ($product->price->prixVenteGros - (($product->price->prixVenteGros*$product->price->remise)/100)) * $this->editQuantite
-                                    : $product->price->prixVenteGros * $this->editQuantite;
+            if($product->price->prixVenteFinale == 0){
+               $this->montantTotal = $product->price->discount == true ? ($product->price->prixDetails - (($product->price->prixDetails*$product->price->remise)/100)) * $this->editQuantite
+                                                                        : $product->price[$this->TypeVente] * $this->editQuantite;
+
+            }else{
+               $this->montantTotal = $product->price->discount == true ? ($product->price->prixDetails - (($product->price->prixDetails*$product->price->remise)/100)) * $this->editQuantite
+                                                                       : $product->price->prixVenteFinale * $this->editQuantite;
+
+            }
+            // $this->montantTotal = $product->price->discount == true ? ($product->price->prixDetails - (($product->price->prixDetails*$product->price->remise)/100)) * $this->editQuantite
+            //                         : $product->price[$this->TypeVente] * $this->editQuantite;
+            
             $product->bonventes()->sync([$this->bonVente->id => ['quantite' => $this->editQuantite,'montantTotal'=> $this->montantTotal]]);
             $this->bonVente->updateMontantBonVente($this->montantTotal);
-            $this->editQuantite = 0 ;
+            $this->editQuantite = 1 ;
             $this->emit('refresh');
             $this->emit('closeModel');
          }
@@ -118,9 +168,9 @@ class SelectProducts extends Component {
 
     public function montantPayer(){
         $this->bonVente->updateMontantBonVente(null,$this->montantVerse,null);
+        
         $this->emit('refresh');
         $this->emit('closeModel');
-
     }
 
     // Téléchargé Bon Vente
@@ -136,6 +186,20 @@ class SelectProducts extends Component {
                 'outOfStock' => $outOfStock,
             ]);
         }
+
+        $typeFacture = $this->TypeVente == 'prixDetails' ? 'details' : ($this->TypeVente == 'prixVenteGros' ? 'gros' : 'facilite') ;
+
+        
+        if( $this->TypeVente == 'prixFacilite') {
+               Versement::create([
+                  'DateVersement' => date('Y-m-d'),
+                  'montantVersement' => $this->montantVerse ,
+                  'bon_vente_id' => $this->bonVente->id ,
+               ]);
+         }
+        
+
+        $this->bonVente->update(['typeVente'=>$typeFacture]); 
 
         $template = new \PhpOffice\PhpWord\TemplateProcessor(dirname(dirname(__DIR__)) . '\templates\facture.docx');
 
