@@ -17,6 +17,7 @@ class MagazinController extends Controller
     public function update(Request $request)
     {
          $magazin = Magazin::first();
+         
          $magazin->update([
             'name' => $request->name ,
             'address' => $request->address ,
@@ -30,6 +31,7 @@ class MagazinController extends Controller
          ]);
 
          toast('Les informations du magazin mettre à jours avec success','success');
+         
          return redirect()->route('magazin.profile');
     }
 

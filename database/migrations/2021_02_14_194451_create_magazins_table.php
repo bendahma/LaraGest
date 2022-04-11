@@ -24,7 +24,6 @@ class CreateMagazinsTable extends Migration
             $table->string('NIF')->nullable();
             $table->string('NFiscal')->nullable();
             $table->string('registreCommerce')->nullable();
-            $table->string('logo')->nullable();
             $table->timestamps();
         });
     }
