@@ -11,6 +11,7 @@ use Illuminate\Support\Arr;
 use App\Stock;
 use App\BonVente;
 use App\Frais;
+use App\Models\Activation;
 
 class DashboardController extends Controller
 {
@@ -56,5 +57,9 @@ class DashboardController extends Controller
                   ->with('netEarning',$netEarning)
                   ->with('dailyVente',$dailyVente);
 
+    }
+
+    public function notActivated(){
+       return view('backoffice.notActivated') ;
     }
 }
